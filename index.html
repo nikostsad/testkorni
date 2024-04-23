@@ -1,0 +1,1221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Hawka Website</title>
+	<link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <style>
+			body {
+  margin: 0;
+  padding: 0;
+  font-family: Arial, sans-serif;
+}
+
+#fixed-background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw; /* viewport width */
+    height: 100vh; /* viewport height */
+    z-index: -1;
+    background-image: radial-gradient(circle at 79.88% -14.09%, #e6f58f 0, #e9eb7f 10%, #ecdf6e 20%, #efd25d 30%, #f1c44d 40%, #f2b53c 50%, #f3a52d 60%, #f59522 70%, #f8851d 80%, #fa741e 90%, #fc6324 100%);
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center center;
+    opacity: 0.95;
+    pointer-events: none; /* Ensure it doesn't block interactions */
+}
+.language-toggle img {
+    width: 60px;
+    height: 40px;
+    cursor: pointer;
+    margin-right: 10px;
+	z-index:10;
+}
+.language-toggle {
+    display: none;
+	 position: absolute;
+    top: 105px; 
+    right: 300px; 
+    z-index: 10;
+}
+.container {
+  position: relative;
+  text-align: center;
+  top: 100px;
+  padding: 20px;
+  border-radius: 10px;
+}
+
+.hawka-button button {
+  top:170px;
+  margin: 10px;
+  position: relative;
+  right: -45.296%;
+  text-align: center;
+  text-transform: uppercase;
+  transition: 0.5s;
+  background-size: 200% auto;
+  color: white;
+  border-radius: 10px;
+  display: block;
+  border: 0px;
+  font-weight: 700;
+  box-shadow: 0px 0px 14px -7px #f09819;
+  background-image: linear-gradient(45deg, #FF512F 0%, #F09819  51%, #FF512F  100%);
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  padding: 0px 0px;
+  font-size: 28px;
+  cursor: pointer;
+  outline: none;
+    background: transparent;   /* Makes the button's background transparent */
+    box-shadow: none;          /* Removes the shadow from the button */
+    border: none;              /* Removes any border */
+    padding: 0;                /* Removes any padding */
+}
+.hawka-logo {
+     width: 150px;    /* Ensure the image does not overflow the button */
+    height: auto;
+    display: block;   /* Makes the image a block-level element, removing extra space below it */
+    margin: 0 auto;   /* Centers the image horizontally */
+}
+.button-container {
+  display: none;
+  position: relative;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+  right:25px;
+}
+
+.sub-button {
+  padding: 0px 0px;
+  font-size: 19px;
+  cursor: pointer;
+  width: 160px;
+  height: 50px;
+  margin: 10px;
+  text-align: center;
+  text-transform: uppercase;
+  transition: 0.5s;
+  background-size: 200% auto;
+  color: white;
+  border-radius: 10px;
+  display: block;
+  border: 0px;
+  font-weight: 700;
+  box-shadow: 0px 0px 14px -7px #f09819;
+  background-image: linear-gradient(45deg, #FF512F 0%, #F09819  51%, #FF512F  100%);
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+}
+.sub-button:hover {
+  background-position: right center;
+  /* change the direction of the change here */
+  color: #fff;
+  text-decoration: none;
+}
+
+.sub-button:active {
+  transform: scale(0.95);
+}
+#live-button {
+  display: none;
+  padding: 10px 20px;
+  font-size: 19px;
+  top: 5px;
+  width:100px;
+  position: relative;
+  left: 200px;
+  margin: 10px;
+  text-align: center;
+  text-transform: uppercase;
+  transition: 0.5s;
+  background-size: 200% auto;
+  color: white;
+  border-radius: 10px;
+  border: 0px;
+  font-weight: 700;
+  box-shadow: 0px 0px 14px -7px #f09819;
+  background-image: linear-gradient(45deg, #FF512F 0%, #F09819  51%, #FF512F  100%);
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+}
+
+.switch-container {
+  display: none;
+  top:-60px;
+  position: relative;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+}
+
+.switch {
+  position: relative;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  width: 700px;
+  height:75px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  overflow: hidden;
+  font-weight: 700;
+  font-size:20px;
+  box-shadow: 0px 0px 14px -7px #f09819;
+  background-image: linear-gradient(45deg, #FFA65F 0%, #FFA65F  51%, #FFA65F  100%);
+}
+
+.indicator {
+  position: absolute;
+  height: 100%;
+  width: 25%;
+  box-shadow: 0px 0px 14px -7px #f09819;
+  background-image: linear-gradient(45deg, #FF512F 0%, #F09819  51%, #FF512F  100%);
+  transition: left 0.3s ease-in-out;
+  z-index: 1;
+  left: 0;
+}
+
+.label {
+  flex: 1;
+  text-align: center;
+  padding: 10px;
+  color: white;
+  z-index: 2;
+}
+
+#image-container {
+  display: none;
+  margin: -10px auto 0 auto;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 30px;
+  max-width: 1700px;
+}
+
+.image-wrapper {
+  display: none;
+  border-radius: 70px;
+  overflow: hidden;
+  position: relative;
+  transform: scale(1);
+  transition: transform 0.2s ease;
+  width:370px;
+  height:370px;
+}
+
+.description {
+  position: absolute;
+  width: 100%;  /* Set the width to 100% */
+  background-color: rgba(0, 0, 0, 0.6);
+  color: white;
+  padding: 5px 0; /* Adjust the padding to only have top and bottom padding */
+  border-radius: 0; /* Set border-radius to 0 since it's spanning the entire width */
+  text-align: center;  /* Center the text */
+  visibility: hidden;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  bottom: 0;
+}
+
+.image-wrapper:hover .description {
+  visibility: visible;
+  opacity: 1;
+}
+
+.image-wrapper:hover {
+  transform: scale(1.05);
+}
+
+.food-image {
+  width: 100%;
+  display: none;
+}
+
+.image-wrapper:nth-of-type(2),
+.image-wrapper:nth-of-type(7) {
+  border: 9px solid red;
+}
+
+.image-wrapper:nth-of-type(1),
+.image-wrapper:nth-of-type(3),
+.image-wrapper:nth-of-type(4),
+.image-wrapper:nth-of-type(5),
+.image-wrapper:nth-of-type(6),
+.image-wrapper:nth-of-type(10) {
+  border: 9px solid yellow;
+}
+
+.image-wrapper:nth-of-type(8),
+.image-wrapper:nth-of-type(9),
+.image-wrapper:nth-of-type(11) {
+  border: 9px solid green;
+}
+
+.opening-times-widget {
+  display: none;
+  position: relative;
+  left: 49.7%;
+  top: -730px;
+  transform: translateX(-50%);
+  padding: 20px;
+  background-color: rgba(255, 255, 255, 0.9);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  z-index: 1000;
+  width: 1145px;
+  height: 100px;
+  font-size: 20px;
+  text-align: center;
+  border-radius: 10px;
+}
+
+.map-and-overlay-wrapper {
+  display: flex;
+  position: relative;
+  justify-content: center;
+  align-items: center;
+  margin-top: 200px;
+  width: 800px;
+  height: 550px;
+}
+
+.overlay {
+  display: none;
+  flex: 1;
+  grid-template-columns: repeat(2, 1fr);
+  row-gap: 0px;
+  column-gap: 10px;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  background-size: cover;
+  padding: 10px;
+  height: 550px;
+  left: 65%;
+  top:-9%;
+}
+
+.map-container {
+  display: none;
+  flex: 1;
+  position: relative;
+  background-color: rgba(255, 255, 255, 0.9);
+  padding: 20px;
+  border-radius: 10px;
+  width: 650px;
+  height: 515px;
+  top: -6%;
+  left: 65%;
+  z-index: 10;
+}
+
+.info-box {
+            padding: 25px;
+            background: rgba(255, 255, 255, 0.9);
+           margin-top: 15px; 
+        
+            text-align: center;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            font-size: 20px;
+            width: 300px;   /* Add a fixed width */
+            height: 220px;  /* Add a fixed height */
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+			 height: 220px; /* Adjust if necessary */
+            align-items: center;
+            }
+.info-box > * {
+  flex: 1; 
+  display: flex; 
+  justify-content: center; /* This centers horizontally for flex items */
+  align-items: center; /* This centers vertically for flex items */
+  width: 100%; /* Full width of the parent */
+}
+.icon {
+   flex: none; /* Do not allow the icon to grow or shrink */
+  display: inline-block;
+  width: 60px;
+  height: 60px;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+.bottom-align-text {
+  align-self: flex-end; /* Aligns the text to the bottom */
+}
+.icon-location {
+  background-image: url('https://i.imgur.com/N5o7QXp.png');
+  margin-top:40px;
+}
+
+.icon-phonenumber {
+  background-image: url('https://i.imgur.com/uIlPRfp.png');
+  margin-top:40px;
+}
+
+.icon-payment {
+  background-image: url('https://i.imgur.com/hIsUstt.png');
+  margin-top:40px;
+}
+
+.icon-mail {
+  background-image: url('https://i.imgur.com/kfJYp9u.png');
+  width:55px;
+  height:55px;
+  margin-top:40px;
+  
+}
+
+
+#map {
+    margin-top: 80px; /* Adjust this value to shift the map content upwards */
+	width: 425px;
+	height: 350px;
+}
+
+.info-box a {
+  color: black;
+  text-decoration: none;
+}
+
+.info-box a:hover {
+  text-decoration: underline;
+}
+
+.info-box p {
+  margin: 20px 0;
+}
+
+.modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.7);
+  z-index: 100;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-content {
+  width: 600px;
+  background-color: white;
+  padding: 20px;
+  border-radius: 10px;
+  overflow: hidden;
+  text-align: center;
+}
+
+.modal-content img {
+  max-width: 100%;
+  height: auto;
+}
+
+.modal-content .close {
+  position: absolute;
+  right: 10px;
+  top: 5px;
+  font-size: 24px;
+  cursor: pointer;
+}
+  #imageSlider img {
+        max-width: 100%; /* This ensures the image is not bigger than its container */
+        height: 500px; /* This keeps the image aspect ratio intact */
+		width: 500px;
+        display: block; /* This removes any extra space below the image */
+        margin: 0 auto; /* This centers the image */
+    }
+	.dot {
+    height: 30px;
+    width: 30px;
+    margin: 10px 10px;
+    background-color: #FFFFFF;
+    border-radius: 50%;
+    display: inline-block;
+    transition: background-color 0.6s ease;
+}
+
+.active, .dot:hover {
+    background-color: #FF8C00
+;
+}
+.buttons-wrapper {
+    display: flex;
+    align-items: center; /* This will vertically center align the items */
+}
+
+.info-button {
+    display: inline-block; /* Makes the div inline-block and it doesnt move buttons downwards*/
+    position: relative;    /* Needed for absolute positioning of child elements */
+    height: 50px;          /* Adjust as needed */
+    width: 50px;           /* Adjust as needed */
+}
+
+#info-icon {
+    display: none; /* Make the icon visible */
+    height: 100%;   /* Use full height of parent */
+    width: 100%;    /* Use full width of parent */
+    position: absolute; /* Position it within the .info-button */
+	left:1482px;
+	top:75px;
+}
+@media only screen and (max-width: 768px) {
+ 
+	 .language-toggle {
+        right: 0px; /* Adjusting the position for mobile screens */
+        top: -80px;   /* You can adjust this value based on your needs */
+    }
+	.language-toggle img {
+    width: 50px;
+    height: 30px;
+}
+    .hawka-button button {
+   top:-110px;
+    width: 130px;
+	right: -28%;
+  }
+  .switch-container {
+           top: -50px; /* adjust this value for mobile */
+		   left: 0;
+  }
+  .switch {
+  width:100%;
+  font-size:16px;
+  font-weight: 300;
+}
+  
+  .button-container {
+    left: 0;
+  }
+  .sub-button {
+    font-size:16px;
+    margin: 0 2.53px;
+    width:100px;
+  }
+  #live-button {
+    top: 90px;
+    left: 35%;
+	
+  }
+
+  #image-container {
+    gap: 5px;
+	border-radius:4px;
+	margin-top:20px;
+	margin-left:-10px;
+	max-width: 100%;
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .description {
+  font-size: 11px;
+  }
+  .image-wrapper {
+  width:180px;
+  height:180px;
+}
+.image-wrapper:nth-of-type(2),
+.image-wrapper:nth-of-type(7) {
+  border: 4.5px solid red;
+}
+
+.image-wrapper:nth-of-type(1),
+.image-wrapper:nth-of-type(3),
+.image-wrapper:nth-of-type(4),
+.image-wrapper:nth-of-type(5),
+.image-wrapper:nth-of-type(6),
+.image-wrapper:nth-of-type(10) {
+  border: 4.5px solid yellow;
+}
+
+.image-wrapper:nth-of-type(8),
+.image-wrapper:nth-of-type(9),
+.image-wrapper:nth-of-type(11) {
+  border: 4.5px solid green;
+}
+.opening-times-widget {
+    width: 100%; /* testen auf verschiedenen Geräten */
+   margin-top:-310px;
+    height: auto;
+	left:50%;
+  }
+  .map-and-overlay-wrapper {
+    flex-direction: column;
+    width: 100%;
+    height: auto;
+  }
+
+  .overlay {
+    width: 100%;
+    height: auto;
+	margin-top:-10px;
+	left: 0%;
+  }
+
+  .map-container {
+    order: 2; /* ensure it comes after the info-box */
+    width: 350px;
+    height: 340px;
+    top: -50px; /* optional: add a little spacing */
+    left: 0%; /* Resetting left position */
+    padding: 10px;
+	padding-top: 0px;
+  }
+
+   .info-box {
+    width: 90%;
+    position: relative;
+    min-height: 150px; /* Set a minimum height for consistency */
+    display: flex;     /* Use flexbox for centering */
+    flex-direction: column; /* Stack content vertically */
+    justify-content: center; /* Center content vertically */
+    padding: 10px;
+   margin: -10px 0 20px;
+    font-size: 18px;
+    order: 1;
+	top:-30px;
+ }
+  .icon-phonenumber {
+     position: relative;
+  top:25px;
+  width:70px;
+  height:70px;
+  margin-top:10px;
+  }
+ .icon-payment {
+   	 position: relative;
+  	 top: 5px; /* Adjust this value to move down */
+	 width:60px;
+	 height:60px;
+  }
+  .icon-mail {
+	 position: relative;
+	 width:45px;
+	 height:45px;
+	}
+  .modal-content {
+    width: 80%; /* making the modal wider on mobile */
+  }
+  #map {
+  width: 350px;
+  height: 330px;
+  margin-top:10px;
+  }
+#imageSlider img {
+      margin-top:15px; 
+      height:400px;	  
+    }
+	#info-icon {
+	top:150px;
+	left:280px;
+	width: 40px; /* Explicit width */
+    height: 40px; /* Explicit height */
+}
+.active, .dot:hover {
+    background-color: #f1c44d
+;
+}
+}
+
+
+	  </style>
+</head>
+<body>
+<div id="fixed-background"></div>
+    <div class="container">
+	    <div class="language-toggle">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a5/Flag_of_the_United_Kingdom_%281-2%29.svg/1920px-Flag_of_the_United_Kingdom_%281-2%29.svg.png" alt="English" id="en" />
+    <img src="https://upload.wikimedia.org/wikipedia/en/thumb/b/ba/Flag_of_Germany.svg/1920px-Flag_of_Germany.svg.png" alt="German" id="de" />
+</div>
+      <div class="hawka-button">
+     <button class="sub-button" id="hawka-button">
+	    <img src="https://i.imgur.com/enJh6iH.png" alt="Hawka Logo" class="hawka-logo">
+        </button>
+    </div>
+	  <div class="buttons-wrapper">
+	  <div class="info-button">
+	  <img src="https://i.imgur.com/fACl4hw.png" id="info-icon">
+	  </div>
+    <div class="button-container" id="button-container">
+      <button class="sub-button" id ="concept-button" data-translate="Concept">Concept</button>
+      <button class="sub-button" id="good-food-button">Good Food</button>
+      <button class="sub-button" id="teamHawkaButton">Team Hawka</button>
+      <button class="sub-button" id="info-button">Info</button>
+    </div>
+	</div>
+	<div id="imageSlider" style="display:none;">
+    <img id="sliderImage" alt="Slide 1">
+     <div id="dotContainer">
+        <span class="dot" onclick="currentSlide(1)"></span>
+        <span class="dot" onclick="currentSlide(2)"></span>
+        <span class="dot" onclick="currentSlide(3)"></span>
+        <span class="dot" onclick="currentSlide(4)"></span>
+    </div>
+</div>
+    <button id="live-button" class="live-button-class">LIVE</button>
+    <div class="switch-container" id="switch-container">
+      <div class="switch" id="four-state-switch">
+        <div class="indicator"></div>
+        <div class="label" data-state="main-dishes" data-translate="MainDishes">Spoons</div>
+        <div class="label" data-state="specials">Specials</div>
+       		<div class="label" data-state="extras" data-translate="Extras">Add-Ons </div>
+			 <div class="label" data-state="sweets" data-translate="Sweets">Sweets</div>
+      </div>
+    </div>
+    <div class="image-container" id="image-container">
+       <div class="image-wrapper">
+      <img src="https://i.imgur.com/7ATF07F.png" alt="Image Pad Kra Pao Gai" class="food-image">
+                    <div class="description">  <h3 data-translate="PadKraPaoGai">Pad Kra Pao Gai</h3>
+						<p data-translate="PadKraPaoGaiIngredients">minced chicken breast, green beans, Thai basil, holy basil, red chili, garlic, chili flakes, oyster sauce, fish sauce, dark soy sauce, light soy sauce, chicken broth, palm sugar, canola oil</p></div>
+</div>
+        <div class="image-wrapper">
+      <img src="https://i.imgur.com/MRhZg5U.jpg" alt="Image Pad Kra Pao Moo" class="food-image">
+                     <div class="description"><h3 data-translate="PadKraPaoMoo">Pad Kra Pao Moo</h3>
+                        <p data-translate="PadKraPaoMooIngredients">minced pork, green beans, Thai basil, holy basil, red chili, garlic, chili flakes, oyster sauce, fish sauce, dark soy sauce, light soy sauce, chicken broth, palm sugar, canola oil</p></div>
+</div>
+         <div class="image-wrapper">
+        <img src="https://i.imgur.com/DchqgqA.jpg" alt="Image Morning Glory" class="food-image">
+                                <div class="description"> <h3 data-translate="MorningGlory">Morning Glory</h3>
+								<p data-translate="MorningGloryIngredients">morning glory, garlic, red chili, oyster sauce, soybean paste, palm sugar, canola oil</p></div>
+		</div>
+		 <div class="image-wrapper">
+         <img src="https://i.imgur.com/FW3ZDbO.png" alt="Image Fried Rice Shrimp" class="food-image">
+                       <div class="description"> <h3 data-translate="FriedRiceShrimp">Fried Rice Shrimp</h3>
+						 <p data-translate="FriedRiceShrimpIngredients">shrimp, chili powder, eggs, rice, lime, spinach, garlic, chili flakes, green onions, shallots, oyster sauce, light soy sauce, canola oil, sugar, chicken broth</p></div>
+       </div>
+        <div class="image-wrapper">
+         <img src="https://i.imgur.com/imO65XU.png" alt="Image Fried Rice Chicken" class="food-image">
+                      <div class="description"> <h3 data-translate="FriedRiceChicken">Fried Rice Chicken</h3>
+                       <p data-translate="FriedRiceChickenIngredients">chicken breast, chili powder, eggs, rice, lime, spinach, garlic, chili flakes, green onions, shallots, oyster sauce, light soy sauce, canola oil, sugar, chicken broth</p></div>
+       </div>
+           <div class="image-wrapper">
+         <img src="https://i.imgur.com/JsO9U4J.png" alt="Image Larb Gai" class="food-image">
+                         <div class="description"> <h3 data-translate="LarbGai">Larb Gai</h3>
+                          <p data-translate="LarbGaiIngredients">minced chicken breast, culantro, lime, shallots, green onions, mint, chili flakes, fish sauce, kaffir lime leaves, sticky rice, chili powder, chicken broth, sugar</p></div>
+       </div>
+        <div class="image-wrapper">
+         <img src="https://i.imgur.com/G3HY01J.png" alt="Image Larb Moo" class="food-image">
+                        <div class="description"> <h3 data-translate="LarbMoo">Larb Moo</h3>
+                         <p data-translate="LarbMooIngredients">minced pork, culantro, lime, shallots, green onions, mint, chili flakes, fish sauce, kaffir lime leaves, sticky rice, chili powder, chicken broth, sugar</p></div>
+       </div>
+             <div class="image-wrapper">
+         <img src="https://i.imgur.com/h0iLbSz.png" alt="Image Thai Red Curry Chicken" class="food-image">
+                                         <div class="description"><h3 data-translate="ThaiRedCurryChicken">Thai Red Curry Chicken</h3>
+                                         <p data-translate="ThaiRedCurryChickenIngredients">chicken breast, kaffir lime leaves, palm sugar, fish sauce, red chili, chicken broth, Thai basil, coconut milk, bamboo, Thai eggplant, red curry paste</p></div>
+      </div>
+               <div class="image-wrapper">
+         <img src="https://i.imgur.com/1akELiS.png" alt="Image Thai Green Curry Chicken" class="food-image">
+                  <div class="description"> <h3 data-translate="ThaiGreenCurryChicken">Thai Green Curry Chicken</h3>
+                   <p data-translate="ThaiGreenCurryChickenIngredients">chicken breast, kaffir lime leaves, palm sugar, fish sauce, red chili, chicken broth, Thai basil, coconut milk, bamboo, Thai eggplant, green curry paste</p></div>
+     </div>
+	 <div class="image-wrapper">
+        <img src="https://i.imgur.com/YgGuFHF.png" alt="Image Fried Pork Belly" class="food-image">
+                        <div class="description"><h3 data-translate="FriedPorkBelly">Fried Pork Belly</h3>
+                         <p data-translate="FriedPorkBellyIngredients">pork belly, fish sauce, white pepper, rice flour, canola oil, tapioca starch</p></div>
+     </div>
+	    <div class="image-wrapper">
+        <img src="https://i.imgur.com/RVmsZcd.png" alt="Image Chicken Wings" class="food-image">
+                        <div class="description"> <h3 data-translate="ChickenWings">Chicken Wings</h3>
+                          <p data-translate="ChickenWingsIngredients">chicken wings, fish sauce, white pepper, rice flour, canola oil</p></div>
+     </div>
+                 <div class="image-wrapper">
+        <img src="https://i.imgur.com/6yyJTLF.png" alt="Image Pad Thai" class="food-image">
+                    <div class="description"><h3 data-translate="PadThai">Pad Thai Chicken/Shrimp</h3>
+                     <p data-translate="PadThaiIngredients">chicken breast/shrimp, chili powder, tofu, rice noodles, dried shrimp, garlic, shallots, yellow radish, chili flakes, peanuts, bean sprouts, long coriander (culantro), lime, eggs, canola oil, chicken broth, palm sugar, water, fish sauce, tamarind</p></div>
+      </div>
+                   <div class="image-wrapper">
+       <img src="https://i.imgur.com/vG0jLgI.jpg" alt="Image Pan Eggs" class="food-image">
+                      <div class="description"> <h3 data-translate="PanEggs">Pan Eggs</h3>
+                       <p data-translate="PanEggsIngredients">minced pork, Thai pork sausage, Chinese sausage, eggs, green onions, canola oil, shallots, garlic, chili flakes, oyster sauce, fish sauce, chicken broth, butter, white pepper, cucumber, bun</p></div>
+      </div>
+                           <div class="image-wrapper">
+        <img src="https://i.imgur.com/tVYUuX6.jpg" alt="Image Rice Soup" class="food-image">
+                        <div class="description"><h3 data-translate="RiceSoup">Rice Soup</h3>
+                         <p data-translate="RiceSoupIngredients">fish sauce, fried garlic, green onions, light soy sauce, chicken breast, chicken broth, ginger, jasmine rice, garlic, coriander, lime, white pepper, shallots, soybean sprouts, lemongrass</p></div>
+     </div>
+                     <div class="image-wrapper">
+        <img src="https://i.imgur.com/dsKTe7Q.png" alt="Image Hawka Breakfast Bun" class="food-image">
+                        <div class="description"> <h3 data-translate="BreakfastBun">Breakfast Bun</h3>
+                          <p data-translate="BreakfastBunIngredients">bread roll, butter, fried egg, light soy sauce, coriander, liverwurst, moo yoo</p></div>
+     </div>
+                       <div class="image-wrapper">
+        <img src="https://i.imgur.com/DnCM3SL.jpg" alt="Image Sticky Pancakes" class="food-image">
+                          <div class="description"><h3 data-translate="StickyPancakes">Sticky Pancakes</h3>
+                            <p data-translate="StickyPancakesIngredients">glutinous rice flour, frozen banana, coconut milk, desiccated coconut, palm sugar, salt, coconut meatt</p></div>
+      </div>
+                         <div class="image-wrapper">
+        <img src="https://i.imgur.com/tTZoHUb.jpg" alt="Image Mango Sticky Rice" class="food-image">
+                            <div class="description"><h3 data-translate="MangoStickyRice">Mango Sticky Rice</h3>
+                              <p data-translate="MangoStickyRiceIngredients">mango, sticky rice, coconut milk, salt, palm sugar, mung beans</p></div>
+      </div>
+                           <div class="image-wrapper">
+        <img src="https://i.imgur.com/Xgip4jIm.jpg" alt="Image Fried Bananas" class="food-image">
+                              <div class="description"><h3 data-translate="FriedBananas">Fried Bananas</h3>
+                               <p data-translate="FriedBananasIngredients">rice flour, plantains, coconut flakes, salt, canola oil, water, sugar, baking powder</p></div>
+      </div>
+                             <div class="image-wrapper">
+        <img src="https://i.imgur.com/Cpcjffl.png" alt="Image Pandan Pancakes" class="food-image">
+                                <div class="description"> <h3 data-translate="PandanPancakes">Pandan Pancakes</h3>
+								<p data-translate="PandanPancakesIngredients">wheat flour, 3.5% milk, sugar, baking powder, eggs, salt, pandan, coconut milk, cornstarch, sugar, eggs</p></div>
+    </div>
+	  <div class="image-wrapper">
+        <img src="https://i.imgur.com/DEj0XBu.jpg" alt="Image Macadamia Chocoloate Cookie" class="food-image">
+                                <div class="description"> <h3 data-translate="MacadamiaChocolateCookie">Macadamia Chocolate Cookie</h3>
+								<p data-translate="MacadamiaChocolateCookieIngredients">butter, brown sugar, vanilla sugar, eggs, wheat flour, baking powder, saking soda, macadamia nuts, dark chocolate</p></div>
+    </div>
+	  <div class="image-wrapper">
+        <img src="https://i.imgur.com/FFHnKWF.jpg" alt="Image Korean Cucumber Salad" class="food-image">
+                                <div class="description"> <h3 data-translate="KoreanCucumberSalad">Korean Cucumber Salad</h3>
+								<p data-translate="KoreanCucumberSaladIngredients">cucumber, garlic, spring onions, sesame seeds, sesame oil, soy sauce, salt, chili powder, paprika powder, rice vinegar</p></div>
+    </div>
+	 <div class="image-wrapper">
+        <img src="https://i.imgur.com/KpebPs2.jpg" alt="Image Boiled Egg" class="food-image">
+                                <div class="description"> <h3 data-translate="KRBoiledEgg">Korean Boiled Egg</h3>
+								<p data-translate="KRBoildEggIngredients">boiled egg, scallions, red chili, garlic, light soy sauce, rice vinegar, honey</p></div>
+    </div>
+	 <div class="image-wrapper">
+        <img src="https://i.imgur.com/g8NgTNa.jpg" alt="Image Fried Egg" class="food-image">
+                                <div class="description"> <h3 data-translate="FriedEgg">Fried Egg</h3>
+								<p data-translate="FriedEggIngredients">egg, black pepper, canola oil</p></div>
+    </div>
+	  </div>
+    <div class="map-and-overlay-wrapper">
+       <div class="overlay" id="overlay">
+        <div class="info-box">
+            <div class="icon icon-location"></div>
+         <p class="bottom-align-text"> <br>Marktplatz 12/k, 78120 Furtwangen</p>
+        </div>
+        <div class="info-box">
+            <div class="icon icon-phonenumber"></div>
+            <p class="bottom-align-text"><br>187187187</p>
+        </div>
+        <div class="info-box">
+            <div class="icon icon-payment"></div>
+           <p class="bottom-align-text"> <br><span data-translate="PaymentMethods">Debit, Creditcard, Cash <br>GooglePay, ApplePay</span></p>
+        </div>
+        <div class="info-box">
+            <div class="icon icon-mail"></div>
+             
+           <a href="mailto:test@hawka.com"><br>test@hawka.com</a>
+		   <p class="bottom-align-text"><a href="#" id="contactUsLink" data-translate="contactUsText"><br>Contact Us</a></p>
+        </div>
+    </div>
+       <div class="map-container" id="map-container">
+    <div id="map" ></div>
+    </div>  
+</div>	
+    <div class="opening-times-widget" id="opening-times-widget">
+   <strong data-translate="openingTimesTitle">Opening Times:<br></strong><br>
+    <span data-translate="daysWeek">Monday - Saturday:</span><br>11:00 - 22:00
+</div>
+   
+</div>
+
+	 <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+  <script>
+ var translations = {
+    'en': {
+       'PadKraPaoGai': 'Pad Kra Pao Gai',
+        'PadKraPaoGaiIngredients': 'minced chicken breast, green beans, Thai basil, holy basil, red chili, garlic, chili flakes, oyster sauce, fish sauce, dark soy sauce, light soy sauce, chicken broth, palm sugar, canola oil',
+        'PadKraPaoMoo': 'Pad Kra Pao Moo',
+        'PadKraPaoMooIngredients': 'minced pork, green beans, Thai basil, holy basil, red chili, garlic, chili flakes, oyster sauce, fish sauce, dark soy sauce, light soy sauce, chicken broth, palm sugar, canola oil',
+        'MorningGlory': 'Morning Glory',
+        'MorningGloryIngredients': 'morning glory, garlic, red chili, oyster sauce, soybean paste, palm sugar, canola oil',
+        'FriedRiceShrimp': 'Fried Rice Shrimp',
+        'FriedRiceShrimpIngredients': 'shrimp, chili powder, eggs, rice, lime, spinach, garlic, chili flakes, green onions, shallots, oyster sauce, light soy sauce, canola oil, sugar, chicken broth',
+        'FriedRiceChicken': 'Fried Rice Chicken',
+        'FriedRiceChickenIngredients': 'chicken breast, chili powder, eggs, rice, lime, spinach, garlic, chili flakes, green onions, shallots, oyster sauce, light soy sauce, canola oil, sugar, chicken broth',
+        'LarbGai': 'Larb Gai',
+        'LarbGaiIngredients': 'minced chicken breast, culantro, lime, shallots, green onions, mint, chili flakes, fish sauce, kaffir lime leaves, sticky rice, chili powder, chicken broth, sugar',
+        'LarbMoo': 'Larb Moo',
+        'LarbMooIngredients': 'minced pork, culantro, lime, shallots, green onions, mint, chili flakes, fish sauce, kaffir lime leaves, sticky rice, chili powder, chicken broth, sugar',
+        'ThaiRedCurryChicken': 'Thai Red Curry Chicken',
+        'ThaiRedCurryChickenIngredients': 'chicken breast, kaffir lime leaves, palm sugar, fish sauce, red chili, chicken broth, Thai basil, coconut milk, bamboo, Thai eggplant, red curry paste',
+        'ThaiGreenCurryChicken': 'Thai Green Curry Chicken',
+        'ThaiGreenCurryChickenIngredients': 'chicken breast, kaffir lime leaves, palm sugar, fish sauce, red chili, chicken broth, Thai basil, coconut milk, bamboo, Thai eggplant, green curry paste',
+        'FriedPorkBelly': 'Fried Pork Belly',
+        'FriedPorkBellyIngredients': 'pork belly, fish sauce, white pepper, rice flour, canola oil, tapioca starch',
+        'ChickenWings': 'Chicken Wings',
+        'ChickenWingsIngredients': 'chicken wings, fish sauce, white pepper, rice flour, canola oil',
+        'PadThai': 'Pad Thai',
+        'PadThaiIngredients': 'chicken breast/shrimp, chili powder, tofu, rice noodles, dried shrimp, garlic, shallots, yellow radish, chili flakes, peanuts, bean sprouts, long coriander (culantro), lime, eggs, canola oil, chicken broth, palm sugar, water, fish sauce, tamarind',
+        'PanEggs': 'Pan Eggs',
+        'PanEggsIngredients': 'minced pork, Thai pork sausage, Chinese sausage, eggs, green onions, canola oil, shallots, garlic, chili flakes, oyster sauce, fish sauce, chicken broth, butter, white pepper, cucumber, bun',
+        'RiceSoup': 'Chicken and Rice Soup',
+        'RiceSoupIngredients': 'fish sauce, fried garlic, green onions, light soy sauce, chicken breast, chicken broth, ginger, jasmine rice, garlic, coriander, lime, white pepper, shallots, soybean sprouts, lemongrass',
+        'BreakfastBun': 'Hawka Breakfast Bun',
+        'BreakfastBunIngredients': 'bread roll, butter, fried egg, light soy sauce, coriander, liverwurst, moo yoo',
+        'StickyPancakes': 'Sticky Pancakes',
+        'StickyPancakesIngredients': 'glutinous rice flour, banana, coconut milk, desiccated coconut, palm sugar, salt, coconut meat',
+        'MangoStickyRice': 'Mango Sticky Rice',
+        'MangoStickyRiceIngredients': 'mango, sticky rice, coconut milk, salt, palm sugar, mung beans',
+        'FriedBananas': 'Fried Bananas',
+        'FriedBananasIngredients': 'rice flour, plantains, coconut flakes, salt, canola oil, water, sugar, baking powder',
+        'PandanPancakes': 'Pandan Pancakes',
+        'PandanPancakesIngredients': 'wheat flour, 3.5% milk, sugar, baking powder, eggs, salt, pandan, coconut milk, cornstarch, sugar, eggs',
+        'MacadamiaChocolateCookie': 'Macadamia Chocolate Cookie',
+        'MacadamiaChocolateCookieIngredients': 'butter, brown sugar, vanilla sugar, eggs, wheat flour, baking powder, saking soda, macadamia nuts, dark chocolate',
+        'KoreanCucumberSalad': 'Korean Cucumber Salad',
+        'KoreanCucumberSaladIngredients': 'cucumber, garlic, spring onions, sesame seeds, sesame oil, soy sauce, salt, chili powder, paprika powder, rice vinegar',
+        'KRBoiledEgg': 'Korean Boiled Egg',
+        'KRBoildEggIngredients': 'boiled egg, scallions, red chili, garlic, light soy sauce, rice vinegar, honey, sesame',
+        'FriedEgg': 'Fried Egg',
+        'FriedEggIngredients': 'egg, black pepper, canola oil',
+		'MainDishes': 'Spoons',
+		'Sweets': 'Sweets',
+		'Concept': 'Concept',
+		'Extras':'Add-Ons',
+		'PaymentMethods':'Debit, Creditcard, <br>GooglePay, ApplePay <br><br>No Cash',
+		'contactUsText': '&nbsp;<br>Contact Us',
+		'openingTimesTitle': 'Opening Times<br>',
+		'daysWeek': 'Monday - Saturday',
+		
+        // ... other English translations
+    },
+    'de': {
+        'PadKraPaoGai': 'Pad Kra Pao Gai',
+		'PadKraPaoGaiIngredients': 'Hühnerhack, Grüne Bohnen, Thai Basilikum, Heiliges Basilikum, Rote Chili, Knoblauch, Chiliflocken, Austernsoße, Fischsoße, Dunkle Sojasoße, Helle Sojasoße, Hühnerfond, Palmzucker, Rapsöl',
+		'PadKraPaoMoo': 'Pad Kra Pao Moo',
+		'PadKraPaoMooIngredients': 'Schweinehack, Grüne Bohnen, Thailändisches Basilikum, Heiliges Basilikum, Rote Chili, Knoblauch, Chili-Flocken, Austernsauce, Fischsauce, Dunkle Sojasauce, Helle Sojasauce, Hühnerbrühe, Palmzucker, Rapsöl',
+		'MorningGlory': 'Morning Glory',
+		'MorningGloryIngredients': 'Wasserspinat, Knoblauch, Rote Chili, Austernsauce, Sojabohnenpaste, Palmzucker, Rapsöl',
+		'FriedRiceShrimp': 'Gebratener Reis mit Shrimps',
+		'FriedRiceShrimpIngredients': 'Garnelen, Chilipulver, Eier, Reis, Limette, Spinat, Knoblauch, Chiliflocken, Frühlingszwiebeln, Schalotten, Austernsauce, Helle Sojasauce, Rapsöl, Zucker, Hühnerbrühe',
+		'FriedRiceChicken': 'Gebratener Reis mit Huhn',
+		'FriedRiceChickenIngredients': 'Hähnchenbrust, Chilipulver, Eier, Reis, Limette, Spinat, Knoblauch, Chiliflocken, Frühlingszwiebeln, Schalotten, Austernsauce, Helle Sojasauce, Rapsöl, Zucker, Hühnerbrühe',
+		'LarbGai': 'Larb Gai',
+		'LarbGaiIngredients': 'Hühnerhack, Langer Koriander (Kulantro), Limette, Schalotten, Frühlingszwiebeln, Minze, Chiliflocken, Fischsauce, Kaffir-Limettenblätter, Klebreis, Chilipulver, Hühnerbrühe, Zucker',
+		'LarbMoo': 'Larb Moo',
+		'LarbMooIngredients': 'Schweinehack, Langer Koriander, Limette, Schalotten, Frühlingszwiebeln, Minze, Chiliflocken, Fischsoße, Kaffir-Limettenblätter, Klebreis, Chilipulver, Hühnerfond, Zucker',
+		'ThaiRedCurryChicken': 'Rotes Thai Curry Huhn',
+		'ThaiRedCurryChickenIngredients': 'Hähnchenbrust, Kaffir-Limettenblätter, Palmzucker, Fischsoße, Rote Chili, Hühnerfond, Thailändisches Basilikum, Kokosmilch, Bambus, Thailändische Aubergine, Rote Currypaste',
+		'ThaiGreenCurryChicken': 'Grünes Thai Curry Huhn',
+		'ThaiGreenCurryChickenIngredients': 'Hähnchenbrust, Kaffir-Limettenblätter, Palmzucker, Fischsoße, Rote Chili, Hühnerfond, Thailändisches Basilikum, Kokosmilch, Bambus, Thailändische Aubergine, Grüne Currypaste',
+		'FriedPorkBelly': 'Frittierter Schweinebauch',
+		'FriedPorkBellyIngredients': 'Schweinebauch, Fischsoße, Weißer Pfeffer, Reismehl, Rapsöl, Tapiokastärke',
+		'ChickenWings': 'Frittierte Hühnerflügel',
+		'ChickenWingsIngredients': 'Hühnerflügel, Fischsoße, Weißer Pfeffer, Reismehl, Rapsöl',
+		'PadThai': 'Pad Thai',
+		'PadThaiIngredients': 'Hähnchenbrust/Garnelen, Chilipulver, Tofu, Reisbandnudeln, Getrocknete Garnelen, Knoblauch, Schalotten, Gelber Rettich, Chiliflocken, Erdnüsse, Sojasprossen, Langer Koriander, Limette, Eier, Rapsöl, Hühnerfond, Palmzucker, Wasser, Fischsoße, Tamarinde',
+		'PanEggs': 'Asiatische Frühstückspfanne',
+		'PanEggsIngredients': 'Schweinehack, Moo Yoo, Gun Chiang, Eier, Frühlingszwiebeln, Rapsöl, Schalotten, Knoblauch, Chiliflocken, Austernsauce, Fischsoße, Hühnerfond, Butter, Weißer Pfeffer, Gurke, Brötchen',
+		'RiceSoup': 'Reisuppe mit Huhn',
+		'RiceSoupIngredients': 'Fischsoße, Frittierter Knoblauch, Frühlingszwiebeln, Helle Sojasoße, Hühnerbrustfilet, Hühnerfond, Ingwer, Jasminreis, Knoblauch, Koriander, Limette, Pfeffer (weiß), Schalotten, Sojasprossen, Zitronengras',
+		'BreakfastBun': 'Hawka Frühstücksbrötchen',
+		'BreakfastBunIngredients': 'Brötchen, Butter, Frittiertes Ei, Helle Sojasoße, Koriander, Leberwurst, Moo Yoo',
+		'StickyPancakes': 'Klebrige Pfannkuchen',
+		'StickyPancakesIngredients': 'Klebreismehl, Banane, Kokosmilch, Kokosraspeln, Palmzucker, Salz, Kokosnussfleisch',
+		'MangoStickyRice': 'Mango mit Klebreis',
+		'MangoStickyRiceIngredients': 'Mango, Klebreis, Kokosmilch, Salz, Palmzucker, Mungbohnen',
+		'FriedBananas': 'Frittierte Backbananen',
+		'FriedBananasIngredients': 'Reismehl, Kochbananen, Kokosraspeln, Salz, Rapsöl, Wasser, Zucker, Backpulver',
+		'PandanPancakes': 'Pandan Pfannkuchen',
+		'PandanPancakesIngredients': 'Weizenmehl, 3,5% Milch, Zucker, Backpulver, Eier, Salz, Pandan, Kokosmilch, Speisestärke, Zucker, Eier',
+		'MacadamiaChocolateCookie': 'Macadamia Schoko Cookie',
+		'MacadamiaChocolateCookieIngredients': 'Butter, brauner Zucker, Vanillezucker, Eier, Weizenmehl, Backpulver, Natron, Macadamianüsse, Zartbitterschokolade',
+		'KoreanCucumberSalad': 'Koreanischer Gurkensalat',
+		'KoreanCucumberSaladIngredients': 'Gurke, Knoblauch, Frühlingszwiebeln, Sesamsamen, Sesamöl, Sojasauce, Salz, Chilipulver, Paprikapulver, Reisessig',
+		'KRBoiledEgg': 'Koreanisches Gekochtes Ei',
+		'KRBoildEggIngredients': 'Gekochtes Ei, Frühlingszwiebeln, Rote Chili, Knoblauch, Helle Sojasauce, Reisessig, Honig, Sesam',
+		'FriedEgg': 'Frittiertes Spiegelei',
+		'FriedEggIngredients': 'Ei, Schwarzer Pfeffer, Rapsöl',
+		'MainDishes': 'Löffel',
+		'Sweets': 'Süßes',
+		'Concept': 'Konzept',
+		'Extras': 'Extras',
+		'PaymentMethods':'EC-/Kreditkarte, GooglePay, ApplePay <br><br>Keine Barzahlung',
+		'contactUsText': '&nbsp;<br>Schreib uns',
+		'openingTimesTitle': 'Öffnungszeiten<br>',
+		'daysWeek': 'Montag - Samstag',
+        // ... other German translations
+    }
+};
+  document.querySelector(".language-toggle").addEventListener("click", function(event) {
+    if (event.target.tagName === 'IMG') {
+        var lang = event.target.id;
+        switchLanguage(lang);
+    }
+});
+
+function switchLanguage(lang) {
+    var translatableElements = document.querySelectorAll("[data-translate]");
+    
+    translatableElements.forEach(function(element) {
+        var key = element.getAttribute("data-translate");
+        element.innerHTML = translations[lang][key]; // Use innerHTML instead of textContent damit z.B. br tags nicht angezeigt werden nach translation
+    });
+}
+
+  document.addEventListener("DOMContentLoaded", function () {
+  const hawkaButton = document.getElementById("hawka-button");
+  const buttonContainer = document.getElementById("button-container");
+  const goodFoodButton = document.getElementById("good-food-button");
+  const switchContainer = document.getElementById("switch-container");
+  const fourStateSwitch = document.getElementById("four-state-switch");
+  const indicator = fourStateSwitch.querySelector(".indicator");
+  const labels = Array.from(fourStateSwitch.querySelectorAll(".label"));
+  const liveButton = document.getElementById("live-button");
+  const imageContainer = document.getElementById("image-container");
+  const foodImages = Array.from(imageContainer.querySelectorAll(".food-image"));
+
+  let currentStateIndex = 0;
+
+  function updateImageVisibility() {
+    const currentState = labels[currentStateIndex].dataset.state;
+    imageContainer.style.display = "grid";
+
+    // Get all image wrappers
+    const imageWrappers = Array.from(imageContainer.querySelectorAll(".image-wrapper"));
+    // Hide all image wrappers initially
+    imageWrappers.forEach(wrapper => wrapper.style.display = "none");
+
+    foodImages.forEach((img, index) => {
+        if (currentState === "main-dishes" && index < 11) { // Adjusted to < 5
+            img.style.display = "block";
+            imageWrappers[index].style.display = "block"; // Display the wrapper
+        } else if (currentState === "specials" && index >= 11 && index < 15) { // Adjusted from index >= 4 to index >= 5
+            img.style.display = "block";
+            imageWrappers[index].style.display = "block"; // Display the wrapper
+        } else if (currentState === "extras" && index >= 20 && index < 23) {
+            img.style.display = "block";
+            imageWrappers[index].style.display = "block"; // Display the wrapper
+		} else if (currentState === "sweets" && index >= 15 && index < 20) {
+            img.style.display = "block";
+            imageWrappers[index].style.display = "block"; // Display the wrapper
+        } else {
+            img.style.display = "none";
+        }
+    });
+}
+
+ const hawkaLogo = document.querySelector(".hawka-button .hawka-logo");
+    const languageToggle = document.querySelector(".language-toggle");
+
+    hawkaLogo.addEventListener("click", function() {
+        languageToggle.style.display = (languageToggle.style.display === "none" || languageToggle.style.display === "") ? "block" : "none";
+    });
+
+
+hawkaButton.addEventListener("click", function () {
+   const computedStyle = getComputedStyle(buttonContainer);
+   const isButtonContainerVisible = computedStyle.display === "flex";
+        document.getElementById('hawka-button').style.top = isButtonContainerVisible ? "-110px" : "-110px";
+    buttonContainer.style.display = isButtonContainerVisible ? "none" : "flex";
+    // Hide everything else when showing buttonContainer
+    switchContainer.style.display = "none";
+    liveButton.style.display = "none"; 
+    imageContainer.style.display = "none";   
+   // Add this line to hide the map whenever Hawka is clicked.
+    document.getElementById('map-container').style.display = "none";
+   document.getElementById('opening-times-widget').style.display = "none";
+    document.getElementById('overlay').style.display = "none";
+	document.getElementById('imageSlider').style.display = 'none';
+});
+
+goodFoodButton.addEventListener("click", function () {
+    // Toggle visibility of liveButton and switchContainer
+   if (liveButton.style.display === "none" || liveButton.style.display === "") {
+    liveButton.style.display = "block";
+}
+
+if (switchContainer.style.display === "none" || switchContainer.style.display === "") {
+    switchContainer.style.display = "flex";
+}
+    
+    // ONLY after clicking on "Good Food", update the image visibility
+    imageContainer.style.display = "grid";
+  updateImageVisibility();
+   // Add this line to hide the map whenever Good Food is clicked.
+  document.getElementById('map-container').style.display = "none";
+   document.getElementById('opening-times-widget').style.display = "none";
+   document.getElementById('overlay').style.display = "none";
+   document.getElementById('imageSlider').style.display = 'none';
+});
+document.getElementById('teamHawkaButton').addEventListener('click', function() {
+    document.getElementById('imageSlider').style.display = 'none';
+    // Add any other actions you want to perform when the Team Hawka button is clicked
+});
+
+  fourStateSwitch.addEventListener("click", function (event) {
+    // Get the width of the switch and the clicked position within the switch
+    const switchWidth = fourStateSwitch.offsetWidth;
+    const clickX =
+      event.clientX - fourStateSwitch.getBoundingClientRect().left;
+
+    // Determine which third of the switch is clicked
+    const clickedFourth = Math.floor((clickX / switchWidth) * 4);
+    currentStateIndex = clickedFourth;
+indicator.style.left = `${currentStateIndex * 25}%`;
+
+    const currentState = labels[currentStateIndex].dataset.state;
+    console.log(currentState);
+    updateImageVisibility();
+  });
+  
+
+  // Function to hide the switch if it is visible
+  const hideEverything = function () {
+    switchContainer.style.display = "none";
+    liveButton.style.display = "none";
+    imageContainer.style.display = "none";
+    document.getElementById('map-container').style.display = "none"; // hide the map
+     document.getElementById('opening-times-widget').style.display = "none"; // hide the opening times widget
+      document.getElementById('overlay').style.display = "none"; // hide the opening times widget
+	   document.getElementById('imageSlider').style.display = 'none'; // hide the image gallery
+};
+
+const conceptButton = buttonContainer.querySelector('button:nth-child(1)');
+const teamHawkaButton = buttonContainer.querySelector('button:nth-child(3)');
+const infoButton = buttonContainer.querySelector('button:nth-child(4)');
+
+conceptButton.addEventListener("click", function() {
+    // Other elements you want to hide
+    switchContainer.style.display = "none";
+    liveButton.style.display = "none";
+	imageContainer.style.display = "none";
+    document.getElementById('map-container').style.display = "none";
+    document.getElementById('opening-times-widget').style.display = "none";
+    document.getElementById('overlay').style.display = "none";
+
+    // Show the image gallery
+    document.getElementById('imageSlider').style.display = 'block';
+});
+
+teamHawkaButton.addEventListener("click", hideEverything);
+infoButton.addEventListener("click", hideEverything);
+  let mapInitialized = false; // Flag to ensure we only initialize the map once
+    function initializeMap() {
+        if (!mapInitialized) {
+            var map = L.map('map').setView([48.05182617457829, 8.20579469203949], 17);
+
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                maxZoom: 19,
+                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            }).addTo(map);
+
+            L.marker([48.05182617457829, 8.20579469203949]).addTo(map)
+                .bindPopup('Hawka SJ')
+                .openPopup();
+
+            mapInitialized = true;
+        }
+    }
+ 
+ let buttons = document.querySelectorAll('.sub-button');
+buttons.forEach(function(button) {
+    if (button.textContent.includes("Info")) {
+        button.addEventListener('click', function() {
+            let mapContainer = document.getElementById('map-container');
+           let openingTimesWidget = document.getElementById('opening-times-widget');
+        let overlay = document.getElementById('overlay');     
+          if (mapContainer.style.display === "none" || mapContainer.style.display === "") {
+                mapContainer.style.display = "block";
+                openingTimesWidget.style.display = "block"; // show the widget
+              overlay.style.display = "grid";
+                initializeMap(); // Initialize the map when showing it
+            } else {
+                mapContainer.style.display = "none";
+                openingTimesWidget.style.display = "none"; // hide the widget
+               overlay.style.display = "none";
+            }
+        });
+    }
+});
+});
+document.getElementById("concept-button").addEventListener("click", function() {
+    document.getElementById("imageSlider").style.display = "block";
+	 showSlides(currentImageIndex); // Initialize the slider
+});
+
+var images = ["https://i.imgur.com/xa5Okdh.png", "https://i.imgur.com/f6Dql2U.png", "https://i.imgur.com/1djL63A.png", "https://i.imgur.com/eczWuRf.png"];
+var currentImageIndex = 0;
+
+function showSlides(n) {
+    var i;
+    var dots = document.getElementsByClassName("dot");
+    if (n >= images.length) {currentImageIndex = 0}
+    if (n < 0) {currentImageIndex = images.length - 1}
+    for (i = 0; i < dots.length; i++) {
+        dots[i].className = dots[i].className.replace(" active", "");
+    }
+    document.getElementById("sliderImage").src = images[currentImageIndex];
+    dots[currentImageIndex].className += " active";
+}
+
+function currentSlide(n) {
+    showSlides(currentImageIndex = n - 1);
+}
+document.getElementById("imageSlider").addEventListener('touchstart', handleTouchStart, false);
+document.getElementById("imageSlider").addEventListener('touchmove', handleTouchMove, false);
+
+var xDown = null;                                                        
+var yDown = null;
+
+function getTouches(evt) {
+  return evt.touches ||             // browser API
+         evt.originalEvent.touches;  // jQuery
+}                                                     
+
+function handleTouchStart(evt) {
+    const firstTouch = getTouches(evt)[0];                                      
+    xDown = firstTouch.clientX;                                      
+    yDown = firstTouch.clientY;                                      
+};                                                
+
+function handleTouchMove(evt) {
+    if ( ! xDown || ! yDown ) {
+        return;
+    }
+
+    var xUp = evt.touches[0].clientX;                                    
+    var yUp = evt.touches[0].clientY;
+
+    var xDiff = xDown - xUp;
+    var yDiff = yDown - yUp;
+
+    if ( Math.abs( xDiff ) > Math.abs( yDiff ) ) {/*most significant*/
+        if ( xDiff > 0 ) {
+            /* left swipe */ 
+            currentImageIndex = (currentImageIndex + 1) % images.length;
+            showSlides(currentImageIndex);
+        } else {
+            /* right swipe */
+            currentImageIndex = (currentImageIndex - 1 + images.length) % images.length;
+            showSlides(currentImageIndex);
+        }                       
+    } 
+    /* reset values */
+    xDown = null;
+    yDown = null;                                             
+};
+document.getElementById('good-food-button').addEventListener('click', function() {
+    var infoIcon = document.getElementById('info-icon');
+     infoIcon.style.display = infoIcon.style.display === 'none' || infoIcon.style.display === '' ? 'block' : 'none';
+	  document.getElementById('info-icon').style.display = 'block';
+});
+document.getElementById('concept-button').addEventListener('click', function() {
+    document.getElementById('info-icon').style.display = 'none';
+});
+document.getElementById('teamHawkaButton').addEventListener('click', function() {
+    document.getElementById('info-icon').style.display = 'none';
+});
+document.getElementById('info-button').addEventListener('click', function() {
+    document.getElementById('info-icon').style.display = 'none';
+});
+document.querySelector('.hawka-logo').addEventListener('click', function() {
+    document.getElementById('info-icon').style.display = 'none';
+});
+</script>
+</body>
+</html>
