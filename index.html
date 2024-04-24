@@ -52,7 +52,7 @@
   top:170px;
   margin: 10px;
   position: relative;
-  right: -45.296%;
+  right: -40%;
   text-align: center;
   text-transform: uppercase;
   transition: 0.5s;
@@ -77,10 +77,20 @@
     padding: 0;                /* Removes any padding */
 }
 .hawka-logo {
-     width: 150px;    /* Ensure the image does not overflow the button */
+     width: 350px;    /* Ensure the image does not overflow the button */
     height: auto;
     display: block;   /* Makes the image a block-level element, removing extra space below it */
     margin: 0 auto;   /* Centers the image horizontally */
+}
+.hawka-logo-center {
+    transform: scale(0.5); /* Das Logo ist 20% größer in der Mitte */
+    transition: transform 0.5s ease; /* Weiche Animation für die Transformation */
+	margin-top:-110px;
+}
+
+.hawka-logo-top {
+    transform: scale(1); /* Standardgröße, wenn es nach oben fährt */
+    transition: transform 0.5s ease; /* Weiche Animation für die Transformation */
 }
 .button-container {
   display: none;
@@ -238,26 +248,6 @@
 .food-image {
   width: 100%;
   display: none;
-}
-
-.image-wrapper:nth-of-type(2),
-.image-wrapper:nth-of-type(7) {
-  border: 9px solid red;
-}
-
-.image-wrapper:nth-of-type(1),
-.image-wrapper:nth-of-type(3),
-.image-wrapper:nth-of-type(4),
-.image-wrapper:nth-of-type(5),
-.image-wrapper:nth-of-type(6),
-.image-wrapper:nth-of-type(10) {
-  border: 9px solid yellow;
-}
-
-.image-wrapper:nth-of-type(8),
-.image-wrapper:nth-of-type(9),
-.image-wrapper:nth-of-type(11) {
-  border: 9px solid green;
 }
 
 .opening-times-widget {
@@ -482,9 +472,17 @@
     height: 30px;
 }
     .hawka-button button {
-   top:-110px;
-    width: 130px;
-	right: -28%;
+    left: 8%;
+  }
+  .hawka-logo {
+  width: 300px;
+  margin-top:-100px;
+  }
+  .hawka-logo-center {
+  margin-top:-80px;
+  }
+  .hawka-logo-top {
+  margin-top:-100px;
   }
   .switch-container {
            top: -50px; /* adjust this value for mobile */
@@ -524,25 +522,6 @@
   .image-wrapper {
   width:180px;
   height:180px;
-}
-.image-wrapper:nth-of-type(2),
-.image-wrapper:nth-of-type(7) {
-  border: 4.5px solid red;
-}
-
-.image-wrapper:nth-of-type(1),
-.image-wrapper:nth-of-type(3),
-.image-wrapper:nth-of-type(4),
-.image-wrapper:nth-of-type(5),
-.image-wrapper:nth-of-type(6),
-.image-wrapper:nth-of-type(10) {
-  border: 4.5px solid yellow;
-}
-
-.image-wrapper:nth-of-type(8),
-.image-wrapper:nth-of-type(9),
-.image-wrapper:nth-of-type(11) {
-  border: 4.5px solid green;
 }
 .opening-times-widget {
     width: 100%; /* testen auf verschiedenen Geräten */
@@ -720,22 +699,22 @@
                    <p data-translate="ThaiGreenCurryChickenIngredients">chicken breast, kaffir lime leaves, palm sugar, fish sauce, red chili, chicken broth, Thai basil, coconut milk, bamboo, Thai eggplant, green curry paste</p></div>
      </div>
 	 <div class="image-wrapper">
-        <img src="https://i.imgur.com/YgGuFHF.png" alt="Image Fried Pork Belly" class="food-image">
+        <img src="https://imgur.com/2da2YIB.png" alt="Image Fried Pork Belly" class="food-image">
                         <div class="description"><h3 data-translate="FriedPorkBelly">Fried Pork Belly</h3>
                          <p data-translate="FriedPorkBellyIngredients">pork belly, fish sauce, white pepper, rice flour, canola oil, tapioca starch</p></div>
      </div>
 	    <div class="image-wrapper">
-        <img src="https://i.imgur.com/RVmsZcd.png" alt="Image Chicken Wings" class="food-image">
+        <img src="https://imgur.com/2da2YIB.png" alt="Image Chicken Wings" class="food-image">
                         <div class="description"> <h3 data-translate="ChickenWings">Chicken Wings</h3>
                           <p data-translate="ChickenWingsIngredients">chicken wings, fish sauce, white pepper, rice flour, canola oil</p></div>
      </div>
                  <div class="image-wrapper">
-        <img src="https://i.imgur.com/6yyJTLF.png" alt="Image Pad Thai" class="food-image">
+        <img src="https://imgur.com/ELWALHg.png" alt="Image Pad Thai" class="food-image">
                     <div class="description"><h3 data-translate="PadThai">Pad Thai Chicken/Shrimp</h3>
                      <p data-translate="PadThaiIngredients">chicken breast/shrimp, chili powder, tofu, rice noodles, dried shrimp, garlic, shallots, yellow radish, chili flakes, peanuts, bean sprouts, long coriander (culantro), lime, eggs, canola oil, chicken broth, palm sugar, water, fish sauce, tamarind</p></div>
       </div>
                    <div class="image-wrapper">
-       <img src="https://i.imgur.com/vG0jLgI.jpg" alt="Image Pan Eggs" class="food-image">
+       <img src="https://imgur.com/ELWALHg.png" alt="Image Pan Eggs" class="food-image">
                       <div class="description"> <h3 data-translate="PanEggs">Pan Eggs</h3>
                        <p data-translate="PanEggsIngredients">minced pork, Thai pork sausage, Chinese sausage, eggs, green onions, canola oil, shallots, garlic, chili flakes, oyster sauce, fish sauce, chicken broth, butter, white pepper, cucumber, bun</p></div>
       </div>
@@ -807,7 +786,7 @@
         <div class="info-box">
             <div class="icon icon-mail"></div>
              
-           <a href="mailto:test@hawka.com"><br>test@hawka.com</a>
+           <a href="mailto:teamhawka@gmail.com"><br>teamhawka@gmail.com</a>
 		   <p class="bottom-align-text"><a href="#" id="contactUsLink" data-translate="contactUsText"><br>Contact Us</a></p>
         </div>
     </div>
@@ -876,7 +855,7 @@
 		'Sweets': 'Sweets',
 		'Concept': 'Concept',
 		'Extras':'Add-Ons',
-		'PaymentMethods':'Debit, Creditcard, <br>GooglePay, ApplePay <br><br>No Cash',
+		'PaymentMethods':'Debit, Creditcard, <br>GooglePay, ApplePay',
 		'contactUsText': '&nbsp;<br>Contact Us',
 		'openingTimesTitle': 'Opening Times<br>',
 		'daysWeek': 'Monday - Saturday',
@@ -934,7 +913,7 @@
 		'Sweets': 'Süßes',
 		'Concept': 'Konzept',
 		'Extras': 'Extras',
-		'PaymentMethods':'EC-/Kreditkarte, GooglePay, ApplePay <br><br>Keine Barzahlung',
+		'PaymentMethods':'EC-/Kreditkarte, GooglePay, ApplePay',
 		'contactUsText': '&nbsp;<br>Schreib uns',
 		'openingTimesTitle': 'Öffnungszeiten<br>',
 		'daysWeek': 'Montag - Samstag',
@@ -1003,26 +982,36 @@ function switchLanguage(lang) {
     const languageToggle = document.querySelector(".language-toggle");
 
     hawkaLogo.addEventListener("click", function() {
-        languageToggle.style.display = (languageToggle.style.display === "none" || languageToggle.style.display === "") ? "block" : "none";
-    });
+    // Direkte Abfrage des aktuellen Zustands, ohne getComputedStyle
+    const isButtonContainerVisible = buttonContainer.style.display === "flex";
+    const isLanguageToggleVisible = languageToggle.style.display === "block";
 
-
-hawkaButton.addEventListener("click", function () {
-   const computedStyle = getComputedStyle(buttonContainer);
-   const isButtonContainerVisible = computedStyle.display === "flex";
-        document.getElementById('hawka-button').style.top = isButtonContainerVisible ? "-110px" : "-110px";
-    buttonContainer.style.display = isButtonContainerVisible ? "none" : "flex";
-    // Hide everything else when showing buttonContainer
-    switchContainer.style.display = "none";
-    liveButton.style.display = "none"; 
-    imageContainer.style.display = "none";   
-   // Add this line to hide the map whenever Hawka is clicked.
-    document.getElementById('map-container').style.display = "none";
-   document.getElementById('opening-times-widget').style.display = "none";
-    document.getElementById('overlay').style.display = "none";
-	document.getElementById('imageSlider').style.display = 'none';
+    if (isButtonContainerVisible || isLanguageToggleVisible) {
+        // Sofort ausblenden, wenn sichtbar
+        buttonContainer.style.display = "none";
+        languageToggle.style.display = "none";
+        document.getElementById('hawka-button').style.top = "170px"; // Logo zurücksetzen
+		hawkaLogo.classList.remove('hawka-logo-center');
+        hawkaLogo.classList.add('hawka-logo-top');
+        // Alle weiteren Elemente sofort ausblenden
+        switchContainer.style.display = "none";
+        liveButton.style.display = "none"; 
+        imageContainer.style.display = "none";   
+        document.getElementById('map-container').style.display = "none";
+        document.getElementById('opening-times-widget').style.display = "none";
+        document.getElementById('overlay').style.display = "none";
+        document.getElementById('imageSlider').style.display = 'none';
+    } else {
+        // Verzögert einblenden, wenn nicht sichtbar
+        document.getElementById('hawka-button').style.top = "-110px"; // Logo verschieben
+        hawkaLogo.classList.remove('hawka-logo-top');
+        hawkaLogo.classList.add('hawka-logo-center');
+		setTimeout(function() {
+            buttonContainer.style.display = "flex";
+            languageToggle.style.display = "block";
+        }, 500);
+    }
 });
-
 goodFoodButton.addEventListener("click", function () {
     // Toggle visibility of liveButton and switchContainer
    if (liveButton.style.display === "none" || liveButton.style.display === "") {
